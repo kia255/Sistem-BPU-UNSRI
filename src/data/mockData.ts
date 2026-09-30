@@ -1,0 +1,410 @@
+import { RouteOption, Schedule, StopPoint, BusSeat, BlackBoxTestCase, User } from '../types';
+
+export const INITIAL_USER: User = {
+  id: 'usr-001',
+  nama: 'Jacky',
+  email: 'jacky@student.unsri.ac.id',
+  nimNip: '05011182126020',
+  peran: 'mahasiswa',
+  nomorHp: '081312728268',
+  password: 'password123',
+};
+
+export const ROUTES: RouteOption[] = [
+  {
+    id: 'route-ind-plg',
+    asal: 'Kampus UNSRI Indralaya',
+    tujuan: 'Kampus UNSRI Bukit',
+    namaRute: 'Indralaya - Palembang',
+    harga: 15000,
+    estimasiWaktu: '1 jam 15 menit',
+  },
+  {
+    id: 'route-plg-ind',
+    asal: 'Kampus UNSRI Bukit',
+    tujuan: 'Kampus UNSRI Indralaya',
+    namaRute: 'Palembang - Indralaya',
+    harga: 15000,
+    estimasiWaktu: '1 jam 15 menit',
+  },
+];
+
+export const SCHEDULES: Schedule[] = [
+  {
+    id: 'sch-1',
+    routeId: 'route-ind-plg',
+    jamBerangkat: '06:30',
+    jamTiba: '07:45',
+    jenisBus: 'Bus Kampus UNSRI',
+    platNomor: 'BG 7012 UZ',
+    totalKursi: 28,
+    sisaKursi: 22,
+    harga: 15000,
+    tersedia: true,
+  },
+  {
+    id: 'sch-2',
+    routeId: 'route-ind-plg',
+    jamBerangkat: '07:00',
+    jamTiba: '08:15',
+    jenisBus: 'Bus Kampus UNSRI',
+    platNomor: 'BG 7015 UZ',
+    totalKursi: 28,
+    sisaKursi: 13,
+    harga: 15000,
+    tersedia: true,
+  },
+  {
+    id: 'sch-3',
+    routeId: 'route-ind-plg',
+    jamBerangkat: '08:00',
+    jamTiba: '09:15',
+    jenisBus: 'Bus Kampus UNSRI',
+    platNomor: 'BG 7020 UZ',
+    totalKursi: 28,
+    sisaKursi: 7,
+    harga: 15000,
+    tersedia: true,
+  },
+  {
+    id: 'sch-4',
+    routeId: 'route-ind-plg',
+    jamBerangkat: '10:00',
+    jamTiba: '11:15',
+    jenisBus: 'Bus Kampus UNSRI',
+    platNomor: 'BG 7025 UZ',
+    totalKursi: 28,
+    sisaKursi: 18,
+    harga: 15000,
+    tersedia: true,
+  },
+  {
+    id: 'sch-5',
+    routeId: 'route-ind-plg',
+    jamBerangkat: '13:00',
+    jamTiba: '14:15',
+    jenisBus: 'Bus Kampus UNSRI',
+    platNomor: 'BG 7028 UZ',
+    totalKursi: 28,
+    sisaKursi: 15,
+    harga: 15000,
+    tersedia: true,
+  },
+  {
+    id: 'sch-6',
+    routeId: 'route-ind-plg',
+    jamBerangkat: '16:00',
+    jamTiba: '17:15',
+    jenisBus: 'Bus Kampus UNSRI',
+    platNomor: 'BG 7033 UZ',
+    totalKursi: 28,
+    sisaKursi: 9,
+    harga: 15000,
+    tersedia: true,
+  },
+  // Palembang to Indralaya Schedules
+  {
+    id: 'sch-plg-1',
+    routeId: 'route-plg-ind',
+    jamBerangkat: '06:45',
+    jamTiba: '08:00',
+    jenisBus: 'Bus Kampus UNSRI',
+    platNomor: 'BG 7035 UZ',
+    totalKursi: 28,
+    sisaKursi: 16,
+    harga: 15000,
+    tersedia: true,
+  },
+  {
+    id: 'sch-plg-2',
+    routeId: 'route-plg-ind',
+    jamBerangkat: '07:30',
+    jamTiba: '08:45',
+    jenisBus: 'Bus Kampus UNSRI',
+    platNomor: 'BG 7038 UZ',
+    totalKursi: 28,
+    sisaKursi: 12,
+    harga: 15000,
+    tersedia: true,
+  },
+  {
+    id: 'sch-plg-3',
+    routeId: 'route-plg-ind',
+    jamBerangkat: '13:30',
+    jamTiba: '14:45',
+    jenisBus: 'Bus Kampus UNSRI',
+    platNomor: 'BG 7041 UZ',
+    totalKursi: 28,
+    sisaKursi: 20,
+    harga: 15000,
+    tersedia: true,
+  },
+];
+
+export const STOPS_INDRALAYA: StopPoint[] = [
+  {
+    id: 'stop-ind-1',
+    namaHalte: 'Halte UNSRI Indralaya',
+    lokasi: 'Indralaya',
+    estimasiMenitDariBerangkat: 0,
+    deskripsi: 'Pusat Keberangkatan & Kedatangan Bus Kampus Indralaya (Depan Terminal / Rektorat)',
+  },
+];
+
+export const STOPS_PALEMBANG: StopPoint[] = [
+  {
+    id: 'stop-plg-1',
+    namaHalte: 'Halte Kampus UNSRI Bukit',
+    lokasi: 'Palembang',
+    estimasiMenitDariBerangkat: 75,
+    deskripsi: 'Kampus UNSRI Bukit Besar Palembang',
+  },
+];
+
+// Generate 28 bus seats (7 rows x 4 seats: A, B [aisle] C, D)
+export const generateDefaultSeats = (occupiedSeatNumbers: string[] = ['1A', '1C', '2C', '3B', '4A', '5D', '6A']): BusSeat[] => {
+  const seats: BusSeat[] = [];
+  const rows = 7;
+  const cols: ('A' | 'B' | 'C' | 'D')[] = ['A', 'B', 'C', 'D'];
+
+  for (let r = 1; r <= rows; r++) {
+    for (const c of cols) {
+      const seatNo = `${r}${c}`;
+      const isOccupied = occupiedSeatNumbers.includes(seatNo);
+      seats.push({
+        id: `seat-${seatNo}`,
+        nomorKursi: seatNo,
+        baris: r,
+        kolom: c,
+        status: isOccupied ? 'terisi' : 'tersedia',
+      });
+    }
+  }
+  return seats;
+};
+
+// 18 Test Cases exactly transcribed from research paper Table 2 (pages 15-17)
+export const BLACK_BOX_TEST_CASES: BlackBoxTestCase[] = [
+  {
+    no: 1,
+    skenario: 'Registrasi akun baru',
+    input: 'Nama, email, NIM/NIP, password, konfirmasi password',
+    outputDiharapkan: 'Akun berhasil dibuat dan diarahkan ke halaman login',
+    hasil: 'Berhasil',
+    catatan: 'Validasi form lengkap, akun langsung tersimpan di sistem.',
+    kategori: 'Autentikasi',
+  },
+  {
+    no: 2,
+    skenario: 'Validasi kesesuaian password',
+    input: 'Password dan konfirmasi password berbeda',
+    outputDiharapkan: 'Sistem menampilkan peringatan dan akun tidak dibuat',
+    hasil: 'Berhasil',
+    catatan: 'Pesan kesalahan otomatis tampil jika kedua password tidak identik.',
+    kategori: 'Autentikasi',
+  },
+  {
+    no: 3,
+    skenario: 'Login pengguna',
+    input: 'Username/email/NIM dan password valid',
+    outputDiharapkan: 'Pengguna berhasil masuk ke sistem',
+    hasil: 'Berhasil',
+    catatan: 'Sesi aktif dan profil pengguna muncul di navbar.',
+    kategori: 'Autentikasi',
+  },
+  {
+    no: 4,
+    skenario: 'Validasi login gagal',
+    input: 'Password tidak valid',
+    outputDiharapkan: 'Sistem menolak akses dan menampilkan pesan kesalahan',
+    hasil: 'Berhasil',
+    catatan: 'Muncul alert merah: Kata sandi salah.',
+    kategori: 'Autentikasi',
+  },
+  {
+    no: 5,
+    skenario: 'Mencari tiket',
+    input: 'Rute dan tanggal keberangkatan',
+    outputDiharapkan: 'Daftar jadwal sesuai rute dan tanggal ditampilkan',
+    hasil: 'Berhasil',
+    catatan: 'Jadwal filter otomatis saat tanggal atau rute diubah.',
+    kategori: 'Pencarian & Jadwal',
+  },
+  {
+    no: 6,
+    skenario: 'Menampilkan daftar jadwal',
+    input: 'Tanggal keberangkatan dipilih',
+    outputDiharapkan: 'Kartu jadwal berisi jam keberangkatan-kedatangan, Bus Kampus UNSRI, sisa kursi, dan harga ditampilkan',
+    hasil: 'Berhasil',
+    catatan: 'Setiap kartu memuat rincian jam, sisa kursi, Bus Kampus UNSRI, dan tarif Rp15.000.',
+    kategori: 'Pencarian & Jadwal',
+  },
+  {
+    no: 7,
+    skenario: 'Memilih jadwal keberangkatan',
+    input: 'Klik salah satu kartu jadwal',
+    outputDiharapkan: 'Jadwal terpilih dan proses berlanjut ke tahap pilih halte',
+    hasil: 'Berhasil',
+    catatan: 'Bug sistem lama (tombol tidak bisa diklik) telah diperbaiki dengan respons instan.',
+    kategori: 'Pencarian & Jadwal',
+  },
+  {
+    no: 8,
+    skenario: 'Memilih halte naik dan halte turun',
+    input: 'Klik radio button halte naik dan halte turun',
+    outputDiharapkan: 'Halte terpilih (Halte UNSRI Indralaya & Halte Kampus UNSRI Bukit) beserta estimasi waktu tiba bus ditampilkan',
+    hasil: 'Berhasil',
+    catatan: 'Estimasi waktu tiba dihitung dinamis dari jam berangkat jadwal.',
+    kategori: 'Halte',
+  },
+  {
+    no: 9,
+    skenario: 'Validasi tombol selanjutnya',
+    input: 'Hanya satu halte yang dipilih',
+    outputDiharapkan: 'Tombol "Selanjutnya" tidak aktif',
+    hasil: 'Berhasil',
+    catatan: 'Tombol disabled dan terkunci sampai kedua halte (naik & turun) terisi.',
+    kategori: 'Halte',
+  },
+  {
+    no: 10,
+    skenario: 'Memilih kursi',
+    input: 'Klik kursi berstatus tersedia pada denah bus',
+    outputDiharapkan: 'Kursi berubah status menjadi dipilih',
+    hasil: 'Berhasil',
+    catatan: 'Visual kursi berubah menjadi biru/emas dipilih, dan slot data penumpang terbuka.',
+    kategori: 'Kursi',
+  },
+  {
+    no: 11,
+    skenario: 'Validasi kursi terisi',
+    input: 'Klik kursi berstatus terisi',
+    outputDiharapkan: 'Kursi tidak dapat dipilih oleh pengguna',
+    hasil: 'Berhasil',
+    catatan: 'Kursi abu-abu terkunci (disabled) dengan notifikasi bahwa kursi sudah dipesan.',
+    kategori: 'Kursi',
+  },
+  {
+    no: 12,
+    skenario: 'Mengisi data penumpang',
+    input: 'Nama lengkap, NIM/NIP, dan nomor telepon',
+    outputDiharapkan: 'Data penumpang tersimpan sesuai jumlah kursi yang dipilih',
+    hasil: 'Berhasil',
+    catatan: 'Formulir dinamis bertambah sesuai jumlah kursi yang di-booking.',
+    kategori: 'Data & Konfirmasi',
+  },
+  {
+    no: 13,
+    skenario: 'Menampilkan ringkasan pesanan',
+    input: 'Data pemesanan yang telah diisi',
+    outputDiharapkan: 'Rute, jadwal, halte naik, halte turun, kursi, jumlah penumpang, dan total harga ditampilkan',
+    hasil: 'Berhasil',
+    catatan: 'Kartu ringkasan terperinci menampilkan semua parameter pesanan dengan jelas.',
+    kategori: 'Data & Konfirmasi',
+  },
+  {
+    no: 14,
+    skenario: 'Memilih metode pembayaran tunai',
+    input: 'Klik opsi Tunai',
+    outputDiharapkan: 'Metode pembayaran tunai terpilih dan tercatat pada pesanan',
+    hasil: 'Berhasil',
+    catatan: 'Tercatat status pembayaran Tunai (Bayar di loket/bus).',
+    kategori: 'Pembayaran',
+  },
+  {
+    no: 15,
+    skenario: 'Memilih metode pembayaran QRIS',
+    input: 'Klik opsi QRIS',
+    outputDiharapkan: 'Metode pembayaran QRIS terpilih dan kode QR ditampilkan',
+    hasil: 'Berhasil',
+    catatan: 'Menampilkan QR Code QRIS standar BPU UNSRI dengan instruksi pembayaran.',
+    kategori: 'Pembayaran',
+  },
+  {
+    no: 16,
+    skenario: 'Validasi tombol "Konfirmasi & Bayar"',
+    input: 'Data penumpang belum lengkap',
+    outputDiharapkan: 'Tombol tidak dapat digunakan hingga seluruh data terisi',
+    hasil: 'Berhasil',
+    catatan: 'Tombol terkunci (disabled) sebelum nama, NIM/NIP, & no HP terisi lengkap.',
+    kategori: 'Data & Konfirmasi',
+  },
+  {
+    no: 17,
+    skenario: 'Konfirmasi pesanan',
+    input: 'Klik tombol "Konfirmasi & Bayar"',
+    outputDiharapkan: 'Pesanan tersimpan dan tiket diterbitkan',
+    hasil: 'Berhasil',
+    catatan: 'E-Ticket resmi terbit dengan barcode, QR code boarding pass, dan fitur cetak PDF.',
+    kategori: 'Data & Konfirmasi',
+  },
+  {
+    no: 18,
+    skenario: 'Logout pengguna',
+    input: 'Klik tombol logout',
+    outputDiharapkan: 'Sesi pengguna berakhir dan diarahkan ke halaman awal',
+    hasil: 'Berhasil',
+    catatan: 'Sesi dihapus dengan aman dan navigasi kembali ke Beranda.',
+    kategori: 'Autentikasi',
+  },
+];
+
+// Table 3 from the research paper: Comparison of Existing vs Developed System
+export const SYSTEM_COMPARISON_TABLE = [
+  {
+    no: 1,
+    tahapan: 'Menampilkan daftar jadwal keberangkatan',
+    sistemBerjalan: 'Daftar jadwal tidak selalu ditampilkan',
+    sistemDikembangkan: 'Daftar jadwal ditampilkan secara konsisten',
+    status: 'Tuntas',
+  },
+  {
+    no: 2,
+    tahapan: 'Memilih jadwal keberangkatan',
+    sistemBerjalan: 'Tombol tidak berfungsi ketika diklik (Error)',
+    sistemDikembangkan: 'Jadwal dapat dipilih responsif dan proses berlanjut',
+    status: 'Tuntas',
+  },
+  {
+    no: 3,
+    tahapan: 'Memilih halte naik dan halte turun',
+    sistemBerjalan: 'Tidak dapat dijalankan (Alur terputus)',
+    sistemDikembangkan: 'Halte dapat dipilih beserta estimasi waktu tiba bus',
+    status: 'Tuntas',
+  },
+  {
+    no: 4,
+    tahapan: 'Memilih kursi',
+    sistemBerjalan: 'Kursi tidak dapat dipilih (Interface beku)',
+    sistemDikembangkan: 'Kursi dapat dipilih interaktif melalui denah bus',
+    status: 'Tuntas',
+  },
+  {
+    no: 5,
+    tahapan: 'Mengisi data penumpang',
+    sistemBerjalan: 'Tidak dapat dijalankan',
+    sistemDikembangkan: 'Data penumpang dapat diisi dinamis sesuai jumlah kursi',
+    status: 'Tuntas',
+  },
+  {
+    no: 6,
+    tahapan: 'Konfirmasi pesanan',
+    sistemBerjalan: 'Tidak dapat dijalankan',
+    sistemDikembangkan: 'Ringkasan pesanan ditampilkan dan dapat dikonfirmasi',
+    status: 'Tuntas',
+  },
+  {
+    no: 7,
+    tahapan: 'Pemilihan metode pembayaran',
+    sistemBerjalan: 'Belum tersedia',
+    sistemDikembangkan: 'Tersedia pilihan pembayaran Tunai dan QRIS',
+    status: 'Tuntas',
+  },
+  {
+    no: 8,
+    tahapan: 'Penyelesaian proses pemesanan',
+    sistemBerjalan: 'Proses terhenti sebelum selesai',
+    sistemDikembangkan: 'Proses pemesanan dapat diselesaikan sampai tiket diterbitkan',
+    status: 'Tuntas',
+  },
+];

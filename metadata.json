@@ -1,0 +1,6 @@
+{
+  "name": "BPU UNSRI - Tiket Bus Kampus",
+  "description": "Prototipe sistem informasi manajemen pemesanan tiket bus kampus Universitas Sriwijaya (BPU UNSRI) rute Indralaya - Palembang berbasis web dengan pemilihan jadwal, halte, kursi, dan pembayaran Tunai/QRIS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
